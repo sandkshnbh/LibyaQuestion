@@ -1,354 +1,75 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <!-- إعدادات العرض للهواتف فقط -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>سند كشنبة - لعبة ليبية صعبة 😎</title>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
-  <style>
-    :root {
-      --bg-color: #1a1a1a;
-      --text-color: #f0f0f0;
-      --primary: #FFD700;
-      --secondary: #2d2d2d;
-      --correct: #4CAF50;
-      --wrong: #FF5252;
-    }
-    /* تنسيق الرسالة التحذيرية عند استخدام جهاز غير محمول */
-    #desktopWarning {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--bg-color);
-      color: var(--text-color);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 20px;
-      box-sizing: border-box;
-      z-index: 9999;
-      font-size: 1.2em;
-    }
-    /* تصميم mobile-first */
-    body {
-      background: var(--bg-color);
-      color: var(--text-color);
-      font-family: 'Tajawal', sans-serif;
-      margin: 0;
-      padding: 10px;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .container {
-      width: 100%;
-      padding: 10px;
-      box-sizing: border-box;
-    }
-    .question-box {
-      background: linear-gradient(145deg, #2d2d2d, #1f1f1f);
-      padding: 25px;
-      border-radius: 20px;
-      margin: 15px 0;
-      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
-      border: 1px solid #3d3d3d;
-    }
-    .question-text {
-      font-size: 1.3em;
-      color: var(--primary);
-      text-shadow: 0 2px 4px rgba(255,215,0,0.4);
-      margin-bottom: 20px;
-    }
-    .options {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .option {
-      background: #333333;
-      padding: 15px;
-      border-radius: 15px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border: 2px solid transparent;
-      touch-action: manipulation;
-    }
-    .option:active {
-      transform: scale(0.98);
-    }
-    .option:hover {
-      background: #404040;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-    .option .material-icons {
-      font-size: 1.2em;
-      color: var(--primary);
-    }
-    .progress-bar {
-      height: 8px;
-      background: #2d2d2d;
-      border-radius: 10px;
-      margin: 20px 0;
-      overflow: hidden;
-    }
-    .progress {
-      height: 100%;
-      background: linear-gradient(90deg, var(--primary), #FFA500);
-      border-radius: 10px;
-      transition: width 0.6s ease;
-      box-shadow: 0 0 10px rgba(255,215,0,0.3);
-    }
-    .footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: linear-gradient(145deg, #2d2d2d, #1f1f1f);
-      padding: 10px;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      border-top-left-radius: 20px;
-      border-top-right-radius: 20px;
-      box-shadow: 0 -4px 16px rgba(0,0,0,0.2);
-    }
-    .action-btn {
-      padding: 10px 20px;
-      border-radius: 50px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: bold;
-      transition: all 0.3s ease;
-      border: none;
-      touch-action: manipulation;
-      background: linear-gradient(145deg, #FFD700, #FFA500);
-      color: #1a1a1a;
-    }
-    .action-btn:active {
-      transform: scale(0.98);
-    }
-    .social-icon {
-      padding: 8px;
-      border-radius: 50%;
-      background: #333333;
-      transition: transform 0.3s ease;
-      touch-action: manipulation;
-    }
-    .social-icon:active {
-      transform: scale(0.95);
-    }
-    .social-icon:hover {
-      transform: rotate(15deg) scale(1.1);
-    }
-    .custom-alert {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #2d2d2d;
-      padding: 20px;
-      border-radius: 15px;
-      text-align: center;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-      border: 2px solid var(--primary);
-      max-width: 280px;
-      width: 90%;
-      display: none;
-    }
-    .alert-text {
-      font-size: 1.1em;
-      margin: 10px 0;
-    }
-    @media (max-width: 480px) {
-      .question-text {
-        font-size: 1.2em;
-      }
-      .option {
-        font-size: 0.95em;
-      }
-      .action-btn {
-        padding: 8px 16px;
-      }
-    }
-  </style>
-  <script>
-    // دالة لفحص ما إذا كان الجهاز محمولاً أم لا باستخدام userAgent
-    function isMobile() {
-      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    }
-    // عند تحميل الصفحة، إذا لم يكن الجهاز محمولاً نقوم بعرض رسالة تحذيرية فقط
-    if (!isMobile()) {
-      document.addEventListener("DOMContentLoaded", function(){
-        document.body.innerHTML = '<div id="desktopWarning">هذه اللعبة مخصصة للهواتف فقط. يرجى فتحها على جهاز محمول.</div>';
-      });
-    }
-  </script>
-</head>
-<body>
-  <!-- المحتوى الخاص باللعبة يظهر فقط إذا كان الجهاز محمولاً -->
-  <div class="container">
-    <div class="question-box">
-      <div class="question-text" id="question">السؤال 1</div>
-      <div class="options" id="options"></div>
-    </div>
-    <div class="progress-bar">
-      <div class="progress" style="width: 10%"></div>
-    </div>
-  </div>
-
-  <div class="footer">
-    <button class="action-btn" onclick="nextQuestion()">
-      <span class="material-icons-round">sports_esports</span>
-      يلا نجم
-    </button>
-    <a href="https://www.facebook.com/sndkshnbh" class="social-icon" target="_blank">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" width="24" height="24">
-    </a>
-  </div>
-
-  <div class="custom-alert" id="customAlert">
-    <span class="material-icons-round" id="alertIcon" style="font-size: 3em;"></span>
-    <div class="alert-text" id="alertText"></div>
-  </div>
-
-  <script>
-    // مصفوفة إهانات باللهجة الليبية باستخدام "تريس"
+<!-- التعديلات على جزء الأسئلة والردود -->
+<script>
+    // تحديث الإهانات والمديح باللهجة الليبية
     const libyanInsults = [
-      "يا تريس، شكلك نسيت تفطر! 😂",
-      "شكلك ترهوني يا خوي!",
-      " منور يا لامبه!",
-      "تريس، انت قاعد تهبل علينا!",
-      "جاوب تاني يا تريس، كلامك ما عجبش!"
+        "يا زعبوط، الجواب عندك زى ضحكة الدنيا! 😂",
+        "يا طرطور، وينك من الصبح؟!",
+        "جوابك زى شعمة ناشفة!",
+        "والله مابضحتش، جاوب تاني!",
+        "إنت قاعد تهبل يا عمى؟!"
     ];
 
     const libyanCompliments = [
-      "يسلمو جوابك يا بطل! 👌",
-      "إنت شغال على الصعيد يا تريس! 😎",
-      "والله ضحكتنا، كلامك على أصوله!",
-      "جاوبت زي البطل، ما شاء الله! 😍",
-      "إنت فعلاً ملك اللعبة!"
+        "ما شاء الله عليك يا بيه! 👌",
+        "ربي يخليك، جوابك صحيح!",
+        "والله ضحكتنا يا تريس! 😍",
+        "جبتها زى الفل يا معلم!",
+        "إنت أسطى الأجوبة!"
     ];
 
-    // 10 أسئلة جديدة باللهجة الليبية المرحة
+    // الأسئلة الجديدة المضحكة
     const questions = [
-      {
-        question: "وقت تشوف صاحبك داخل السوق ومعاه كيس فلافل، شنو تگوله؟",
-        options: ["والله تريس، الفلافل حارة عليك!", "جيبلي شوية", "فلافل ولا دقة؟"],
-        answer: 0
-      },
-      {
-        question: "وقت واحد يحكي لك عن سيارته القديمة، شنو ترد؟",
-        options: ["سيارتك مثل ضحكتك يا تريس، دايمة تعطي طاقة!", "أكيد تحتاج تصليح", "ما شاء الله عليها"],
-        answer: 0
-      },
-      {
-        question: "في القهوة، إذا صاحبك بدا يحكي سوالف ما تنتهيش، شنو تقول؟",
-        options: ["تريس، سوالفك تفتح النفس!", "زيد شويّة سوالف", "ما تسكتش؟"],
-        answer: 0
-      },
-      {
-        question: "وقت تسمع واحد يقول إنه جرب أكلة غريبة، شنو ترد؟",
-        options: ["يا تريس، أكلك مغامرة بحد ذاتها!", "أكل ولا تجربة؟", "أكيد ضحكتنا"],
-        answer: 0
-      },
-      {
-        question: "وقت تكون في عز العرس والفرحة مالية المكان، شنو تتعجب؟",
-        options: ["يا تريس، الفرح اليوم يقطع العقل!", "كلشي على مزاجك", "الدنيا تحلى"],
-        answer: 0
-      },
-      {
-        question: "وقت صاحبك يتفاخر بآخر مغامرة، شنو تقول؟",
-        options: ["تريس، مغامرتك تضحكنا من قلبنا!", "مغامرة ولا أحلام؟", "زيد قليد"],
-        answer: 0
-      },
-      {
-        question: "وقت تشوف واحد لابس لبسة غير عادية، شنو تقول؟",
-        options: ["يا تريس، لبستك تسرق البصر!", "شنو هاللبس؟", "أكيد مو تقليدي"],
-        answer: 0
-      },
-      {
-        question: "وقت تكون قاعد على دكة الحومة وتسمع الأخبار، شنو يكون التعليق؟",
-        options: ["يا تريس، الأخبار اليوم عامرة ضحك!", "كل يوم جديد", "ما تخلص الحكايات"],
-        answer: 0
-      },
-      {
-        question: "وقت يسألوك عن حالك وانت في مزاج غريب، شنو ترد؟",
-        options: ["ضاحك وبعيوني تريس!", "بخير الحمد لله", "مش مزبوط الحال"],
-        answer: 0
-      },
-      {
-        question: "وقت تسأل واحد: 'شنو سر ضحكتك اليوم؟'، شنو يرد؟",
-        options: ["سرها إنك دمت ضاحك يا تريس!", "سرها بيني وبينك", "ما تحكيش سر"],
-        answer: 0
-      }
+        {
+            question: "إيش يقولولك الليبي إذا نسيت المفاتيح في العربية؟",
+            options: ["خليها مفتاح الرزة يفتحها", "شيلها بالشاكوش", "اسأل الجيران"],
+            answer: 0
+        },
+        {
+            question: "إذا شفت الماعز كلة الواجب المدرسي، إيش ترد؟",
+            options: ["قول: ربينا ماعز متفوق", "اطلب من الماعز تسلم الواجب", "أشكي للمدير"],
+            answer: 0
+        },
+        {
+            question: "شنو الرد المناسب إذا قالولك: قصة شعرك زى البسبوسة؟",
+            options: ["أنا زبيب البسبوسة يا معلم", "هذي موضة السوق", "أنت تاكل بسبوسة كثير"],
+            answer: 0
+        },
+        {
+            question: "وقت العزيمة ونفذت الشعمة، إيش الحل؟",
+            options: ["نقسم الرزة بالعقل", "نطلب تاكسي جيبانة", "نعزم على الجيران"],
+            answer: 0
+        },
+        {
+            question: "إذا القط سرق لك الشيشة، إيش تسوي؟",
+            options: ["تقول: ربي يهديك يا زعبوط", "تجري ورا القط بالشبشب", "تشتري شيشة جديدة"],
+            answer: 0
+        },
+        {
+            question: "إيش تعلق إذا صاحبك يغني في الدوشة؟",
+            options: ["تقول: صوترك زى الماجور", "تشجعه بالتصفيق", "تطلب منه السكوت"],
+            answer: 0
+        },
+        {
+            question: "إذا لابس شبشبين مختلفين، إيش تبرر؟",
+            options: ["قول: هذي موضة السوق السودة", "أقول نسيت النعل", "أخبي الثاني تحت السرير"],
+            answer: 0
+        },
+        {
+            question: "إيش تقول إذا نطت الحية في عز العرس؟",
+            options: ["هاتوها زفة وحنونة", "اطلبو الإسعاف", "هرب برا القاعة"],
+            answer: 0
+        },
+        {
+            question: "إذا المطر نزل في النزهة، إيش الحل الليبي؟",
+            options: ["نقول: مبروك المولود الجديد", "نفتح مظلة الرزة", "نرجع للبيت"],
+            answer: 0
+        },
+        {
+            question: "إيش ترد إذا واحد قالك: شاشة التلفون مشققة؟",
+            options: ["قول: دي زى ضحكة الدنيا", "اقترح عليه يشتري جديد", "اعملوها لاصق عراقي"],
+            answer: 0
+        }
     ];
 
-    let currentQuestion = 0;
-
-    function showAlert(icon, text, color) {
-      const alert = document.getElementById('customAlert');
-      alert.style.display = 'block';
-      alert.style.borderColor = color;
-      document.getElementById('alertIcon').textContent = icon;
-      document.getElementById('alertIcon').style.color = color;
-      document.getElementById('alertText').textContent = text;
-      
-      setTimeout(() => {
-        alert.style.display = 'none';
-      }, 2000);
-    }
-
-    function checkAnswer(selected) {
-      const correct = questions[currentQuestion].answer === selected;
-      
-      if(correct) {
-        showAlert('🎉', libyanCompliments[Math.floor(Math.random() * libyanCompliments.length)], getComputedStyle(document.documentElement).getPropertyValue('--correct'));
-        currentQuestion++;
-        updateProgress();
-        if(currentQuestion < questions.length) {
-          setTimeout(showQuestion, 1500);
-        } else {
-          showAlert('🏆', 'والله تريس خلصت اللعبة!', getComputedStyle(document.documentElement).getPropertyValue('--primary'));
-        }
-      } else {
-        showAlert('💥', libyanInsults[Math.floor(Math.random() * libyanInsults.length)], getComputedStyle(document.documentElement).getPropertyValue('--wrong'));
-        document.getElementById('options').children[selected].style.animation = 'shake 0.5s';
-      }
-    }
-
-    function updateProgress() {
-      const progress = (currentQuestion / questions.length) * 100;
-      document.querySelector('.progress').style.width = `${progress}%`;
-    }
-
-    function showQuestion() {
-      const q = questions[currentQuestion];
-      document.getElementById('question').textContent = q.question;
-      
-      const optionsDiv = document.getElementById('options');
-      optionsDiv.innerHTML = q.options.map((opt, i) => `
-        <div class="option" onclick="checkAnswer(${i})">
-          <span class="material-icons-round">${i === q.answer ? 'check_circle' : 'cancel'}</span>
-          ${opt}
-        </div>
-      `).join('');
-    }
-
-    // بدء اللعبة
-    showQuestion();
-
-    // دالة الانتقال للسؤال التالي عند الضغط على زر "يلا نجم"
-    function nextQuestion() {
-      if (currentQuestion < questions.length) {
-        showQuestion();
-      }
-    }
-  </script>
-</body>
-</html>
+    // بقية الكود كما هو ...
+</script>
