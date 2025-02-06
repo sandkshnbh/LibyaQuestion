@@ -2,6 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <!-- دعم الهواتف المحمولة -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>سند كشنبة - لعبة ليبية صعبة 😎</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <style>
@@ -59,6 +61,8 @@
             align-items: center;
             gap: 15px;
             border: 2px solid transparent;
+            /* تحسين دعم اللمس */
+            touch-action: manipulation;
         }
 
         .option:hover {
@@ -111,6 +115,8 @@
             font-weight: bold;
             transition: 0.3s;
             border: none;
+            /* دعم اللمس بشكل أفضل */
+            touch-action: manipulation;
         }
 
         .play-btn {
@@ -143,6 +149,7 @@
             border-radius: 50%;
             background: #333333;
             transition: 0.3s;
+            touch-action: manipulation;
         }
 
         .social-icon:hover {
@@ -213,7 +220,7 @@
                 answer: 0
             },
             {
-                question: "وقت تسمع واحد يقول إنه جرب أكل أكلة غريبة، شنو ترد؟",
+                question: "وقت تسمع واحد يقول إنه جرب أكلة غريبة، شنو ترد؟",
                 options: ["يا تريس، أكلك مغامرة بحد ذاتها!", "أكل ولا تجربة؟", "أكيد ضحكتنا"],
                 answer: 0
             },
@@ -311,4 +318,4 @@
         }
     </script>
 </body>
-  </html>
+</html>
