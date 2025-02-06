@@ -1,339 +1,423 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <!-- إعدادات العرض للهواتف فقط -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>سند كشنبة - لعبة ليبية صعبة 😎</title>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>لعبة أسئلة ليبيه - إعدادات الثيم</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- استخدام خط Roboto -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    /* تعريف المتغيرات الخاصة بالثيم - الافتراضي مستوحى من سند كشنبه */
     :root {
-      --bg-color: #1a1a1a;
-      --text-color: #f0f0f0;
-      --primary: #FFD700;
-      --secondary: #2d2d2d;
-      --correct: #4CAF50;
-      --wrong: #FF5252;
+      --bg-color: #101010;
+      --card-bg: #1a1a1a;
+      --text-color: #DCEOD9;
+      --border-color: #DCEOD9;
+      --btn-gradient-start: #272727;
+      --btn-gradient-end: #3a3a3a;
     }
-    /* تنسيق الرسالة التحذيرية عند استخدام جهاز غير محمول */
-    #desktopWarning {
+
+    /* ثيم 17 فبراير */
+    .theme-feb17 {
+      --bg-color: #0d1b2a;
+      --card-bg: #1b263b;
+      --text-color: #e0e1dd;
+      --border-color: #f87d39;
+      --btn-gradient-start: #23395d;
+      --btn-gradient-end: #406882;
+    }
+
+    /* ثيم روزي من فرقة بلاك بينك */
+    .theme-rose {
+      --bg-color: #2c001e;
+      --card-bg: #3a0f2d;
+      --text-color: #f8b0d0;
+      --border-color: #f7e1ff;
+      --btn-gradient-start: #5c003a;
+      --btn-gradient-end: #7d0055;
+    }
+
+    /* ثيم سند كStencil أو سند كشنبه (الافتراضي) */
+    .theme-sndkshnbh {
+      /* القيم الافتراضية معرفة في :root */
+    }
+
+    /* إعدادات عامة */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      direction: rtl;
+      font-family: 'Roboto', sans-serif;
+    }
+    html, body {
+      height: 100%;
+    }
+    body {
+      background: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 20px;
+      overflow-x: hidden;
+      transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    /* كروت المحتوى */
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 20px;
+      padding: 25px;
+      margin: 15px auto;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+      transition: background 0.4s;
+      animation: fadeInUp 0.6s ease-out both;
+    }
+    @keyframes fadeInUp {
+      from {
+        transform: translateY(30px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    h1, h2, p {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    /* قائمة الخيارات */
+    .options {
+      list-style: none;
+      padding: 0;
+    }
+    .options li {
+      margin: 10px 0;
+    }
+    .option-button {
+      width: 100%;
+      background: linear-gradient(135deg, var(--btn-gradient-start), var(--btn-gradient-end));
+      color: var(--text-color);
+      border: 2px solid var(--border-color);
+      border-radius: 30px;
+      padding: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.3s;
+    }
+    .option-button:hover {
+      transform: scale(1.03);
+      background: linear-gradient(135deg, var(--btn-gradient-end), var(--btn-gradient-start));
+    }
+    .option-button:active {
+      transform: scale(0.98);
+    }
+
+    /* شريط أسفل الصفحة عرضي */
+    .bottom-bar {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      background-color: var(--card-bg);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px 0;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.5);
+      z-index: 1000;
+      transition: background 0.4s;
+    }
+    .bottom-bar button {
+      background: linear-gradient(135deg, var(--btn-gradient-start), var(--btn-gradient-end));
+      color: var(--text-color);
+      border: none;
+      border-radius: 30px;
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .bottom-bar button:hover {
+      transform: scale(1.05);
+      background: linear-gradient(135deg, var(--btn-gradient-end), var(--btn-gradient-start));
+    }
+    .bottom-bar button a {
+      text-decoration: none;
+      color: var(--text-color);
+      font-weight: bold;
+    }
+
+    /* إعدادات المودال */
+    .modal {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: var(--bg-color);
-      color: var(--text-color);
+      background: rgba(0,0,0,0.6);
       display: flex;
-      align-items: center;
       justify-content: center;
-      text-align: center;
+      align-items: center;
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .modal.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .modal-content {
+      background: var(--card-bg);
       padding: 20px;
-      box-sizing: border-box;
-      z-index: 9999;
-      font-size: 1.2em;
-    }
-    /* تصميم mobile-first */
-    body {
-      background: var(--bg-color);
-      color: var(--text-color);
-      font-family: 'Tajawal', sans-serif;
-      margin: 0;
-      padding: 10px;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .container {
-      width: 100%;
-      padding: 10px;
-      box-sizing: border-box;
-    }
-    .question-box {
-      background: linear-gradient(145deg, #2d2d2d, #1f1f1f);
-      padding: 5vw;
-      border-radius: 5vw;
-      margin: 3vw 0;
-      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
-      border: 1px solid #3d3d3d;
-    }
-    .question-text {
-      font-size: 5vw;
-      color: var(--primary);
-      text-shadow: 0 2px 4px rgba(255,215,0,0.4);
-      margin-bottom: 5vw;
-    }
-    .options {
-      display: flex;
-      flex-direction: column;
-      gap: 3vw;
-    }
-    .option {
-      background: #333333;
-      padding: 3vw;
-      border-radius: 3vw;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 3vw;
-      border: 2px solid transparent;
-      touch-action: manipulation;
-    }
-    .option:active {
-      transform: scale(0.98);
-    }
-    .option:hover {
-      background: #404040;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-    .option .material-icons {
-      font-size: 5vw;
-      color: var(--primary);
-    }
-    .progress-bar {
-      height: 2vw;
-      background: #2d2d2d;
-      border-radius: 2vw;
-      margin: 5vw 0;
-      overflow: hidden;
-    }
-    .progress {
-      height: 100%;
-      background: linear-gradient(90deg, var(--primary), #FFA500);
-      border-radius: 2vw;
-      transition: width 0.6s ease;
-      box-shadow: 0 0 10px rgba(255,215,0,0.3);
-    }
-    .footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: linear-gradient(145deg, #2d2d2d, #1f1f1f);
-      padding: 3vw;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      border-top-left-radius: 5vw;
-      border-top-right-radius: 5vw;
-      box-shadow: 0 -4px 16px rgba(0,0,0,0.2);
-    }
-    .action-btn {
-      padding: 3vw 5vw;
-      border-radius: 50px;
-      display: flex;
-      align-items: center;
-      gap: 3vw;
-      font-weight: bold;
-      transition: all 0.3s ease;
-      border: none;
-      touch-action: manipulation;
-      background: linear-gradient(145deg, #FFD700, #FFA500);
-      color: #1a1a1a;
-    }
-    .action-btn:active {
-      transform: scale(0.98);
-    }
-    .social-icon {
-      padding: 3vw;
-      border-radius: 50%;
-      background: #333333;
-      transition: transform 0.3s ease;
-      touch-action: manipulation;
-    }
-    .social-icon:active {
-      transform: scale(0.95);
-    }
-    .social-icon:hover {
-      transform: rotate(15deg) scale(1.1);
-    }
-    .custom-alert {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #2d2d2d;
-      padding: 5vw;
-      border-radius: 5vw;
-      text-align: center;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-      border: 2px solid var(--primary);
-      max-width: 280px;
+      border-radius: 15px;
       width: 90%;
-      display: none;
+      max-width: 400px;
+      text-align: center;
     }
-    .alert-text {
-      font-size: 4vw;
-      margin: 3vw 0;
+    .modal-content h3 {
+      margin-bottom: 15px;
     }
-    @media (max-width: 480px) {
-      .question-text {
-        font-size: 4vw;
-      }
-      .option {
-        font-size: 3vw;
-      }
-      .action-btn {
-        padding: 3vw;
-      }
+    .theme-btn {
+      width: 100%;
+      margin: 8px 0;
+      background: linear-gradient(135deg, var(--btn-gradient-start), var(--btn-gradient-end));
+      color: var(--text-color);
+      border: 2px solid var(--border-color);
+      border-radius: 25px;
+      padding: 10px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .theme-btn:hover {
+      transform: scale(1.03);
+      background: linear-gradient(135deg, var(--btn-gradient-end), var(--btn-gradient-start));
+    }
+    /* التأكد من استجابة اللمس */
+    button:focus {
+      outline: none;
     }
   </style>
-  <script>
-    // دالة لفحص ما إذا كان الجهاز محمولاً أم لا باستخدام userAgent
-    function isMobile() {
-      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    }
-    // عند تحميل الصفحة، إذا لم يكن الجهاز محمولاً نقوم بعرض رسالة تحذيرية فقط
-    if (!isMobile()) {
-      document.addEventListener("DOMContentLoaded", function(){
-        document.body.innerHTML = '<div id="desktopWarning">هذه اللعبة مخصصة للهواتف فقط. يرجى فتحها على جهاز محمول.</div>';
-      });
-    }
-  </script>
 </head>
-<body>
-  <!-- المحتوى الخاص باللعبة يظهر فقط إذا كان الجهاز محمولاً -->
-  <div class="container">
-    <div class="question-box">
-      <div class="question-text" id="question">السؤال 1</div>
-      <div class="options" id="options"></div>
+<body class="theme-sndkshnbh">
+  <div id="container">
+    <!-- شاشة البداية -->
+    <div id="start-screen" class="card">
+      <h1>مرحباً بك في لعبة أسئلة ليبيه</h1>
+      <p>لعبة من 10 مراحل تحتوي على أسئلة عامة، ترفيهية ومضحكة عن ليبيا.</p>
+      <p>اضغط على زر "تشغيل اللعبة" لبدء اللعب!</p>
     </div>
-    <div class="progress-bar">
-      <div class="progress" style="width: 10%"></div>
+
+    <!-- شاشة اللعبة -->
+    <div id="game-screen" class="card" style="display: none;">
+      <h2 id="question-number">السؤال 1 من 10</h2>
+      <p id="question-text">نص السؤال سيظهر هنا</p>
+      <ul class="options" id="options-list">
+        <!-- تتولد الخيارات هنا -->
+      </ul>
+    </div>
+
+    <!-- شاشة النتيجة -->
+    <div id="result-screen" class="card" style="display: none;">
+      <h2>نتيجتك</h2>
+      <p id="result-text"></p>
+      <button id="restart-btn" class="option-button">أعد المحاولة</button>
+    </div>
+  </div>
+
+  <!-- شريط أسفل الصفحة عرضي -->
+  <div class="bottom-bar">
+    <button id="play-btn">
+      <span style="font-size: 22px;">✋</span>
+      <span>تشغيل اللعبة</span>
+    </button>
+    <button id="info-btn">
+      <span>سند كشنبه</span>
+      <span>- لعبة أسئلة مرحة عن ليبيا</span>
+      <a href="https://www.facebook.com/sndkshnbh" target="_blank" title="متابعة مطور اللعبة على فيسبوك">
+        <span style="font-size: 20px;"></span>
+      </a>
+    </button>
+    <button id="settings-btn">
+      <span>⚙️</span>
+      <span>إعدادات</span>
+    </button>
+  </div>
+
+  <!-- مودال الإعدادات -->
+  <div id="settings-modal" class="modal">
+    <div class="modal-content">
+      <h3>اختر الثيم</h3>
+      <button class="theme-btn" data-theme="theme-feb17">ثيم 17 فبراير</button>
+      <button class="theme-btn" data-theme="theme-rose">ثيم روزي (بلاك بينك)</button>
+      <button class="theme-btn" data-theme="theme-sndkshnbh">ثيم سند كشنبه</button>
+      <br>
+      <button id="close-modal" class="theme-btn" style="background: transparent; border: 2px solid var(--border-color);">إغلاق</button>
     </div>
   </div>
 
   <script>
-    // مصفوفة إهانات باللهجة الليبية باستخدام "تريس"
-    const libyanInsults = [
-      "يا تريس، شكلك نسيت تفطرك! 😂",
-      "تريس، كلامك مثل الشاي بلا سكر!",
-      "يا تريس، هاذي مو طريقة الرد!",
-      "تريس، انت قاعد تهبل علينا!",
-      "جاوب تاني يا تريس، كلامك ما عجبش!"
-    ];
-
-    const libyanCompliments = [
-      "يسلمو جوابك يا بطل! 👌",
-      "إنت شغال على الصعيد يا تريس! 😎",
-      "والله ضحكتنا، كلامك على أصوله!",
-      "جاوبت زي البطل، ما شاء الله! 😍",
-      "إنت فعلاً ملك اللعبة!"
-    ];
-
-    // 10 أسئلة جديدة باللهجة الليبية المرحة
+    // بيانات الأسئلة (10 سؤال)
     const questions = [
       {
-        question: "وقت تشوف صاحبك داخل السوق ومعاه كيس فلافل، شنو تگوله؟",
-        options: ["والله تريس، الفلافل حارة عليك!", "جيبلي شوية", "فلافل ولا دقة؟"],
+        question: "ما هي عاصمة ليبيا؟",
+        options: ["طرابلس", "بنغازي", "مصراتة", "زليتن"],
         answer: 0
       },
       {
-        question: "وقت واحد يحكي لك عن سيارته القديمة، شنو ترد؟",
-        options: ["سيارتك مثل ضحكتك يا تريس، دايمة تعطي طاقة!", "أكيد تحتاج تصليح", "ما شاء الله عليها"],
+        question: "في أي بحر تقع ليبيا؟",
+        options: ["البحر الأبيض المتوسط", "البحر الأحمر", "بحر العرب", "البحر الأسود"],
         answer: 0
       },
       {
-        question: "في القهوة، إذا صاحبك بدا يحكي سوالف ما تنتهيش، شنو تقول؟",
-        options: ["تريس، سوالفك تفتح النفس!", "زيد شويّة سوالف", "ما تسكتش؟"],
+        question: "أي من هذه المدن ليست في ليبيا؟",
+        options: ["بنغازي", "طرابلس", "القاهرة", "مصراتة"],
+        answer: 2
+      },
+      {
+        question: "ما هي العملة الليبية؟",
+        options: ["الدينار الليبي", "الجنيه الليبي", "الدولار", "اليورو"],
         answer: 0
       },
       {
-        question: "وقت تسمع واحد يقول إنه جرب أكلة غريبة، شنو ترد؟",
-        options: ["يا تريس، أكلك مغامرة بحد ذاتها!", "أكل ولا تجربة؟", "أكيد ضحكتنا"],
+        question: "أي من هذه الأطباق تُعتبر من المأكولات الليبية التقليدية؟",
+        options: ["الكسكس", "البيتزا", "السوشي", "الباستا"],
         answer: 0
       },
       {
-        question: "وقت تكون في عز العرس والفرحة مالية المكان، شنو تتعجب؟",
-        options: ["يا تريس، الفقطع العقل!", "كلشي على مزك", "الدنيا تحلى"],
+        question: "أي من هذه الفرق الرياضية معروفة في ليبيا؟",
+        options: ["النادي الإفريقي", "الأهلي", "مولودية طرابلس", "الزمالك"],
+        answer: 2
+      },
+      {
+        question: "ما هو المشروب التقليدي الشائع في ليبيا؟",
+        options: ["الشاي بالنعناع", "القهوة العربية", "العصير الطبيعي", "المياه المعدنية"],
+        answer: 1
+      },
+      {
+        question: "ما هي اللغة الرسمية في ليبيا؟",
+        options: ["العربية", "الإنجليزية", "الفرنسية", "الإيطالية"],
         answer: 0
       },
       {
-        question: "وقت صاحبك يتفاخر بآخر مغامرة، شنو تقول؟",
-        options: ["تريس، مغامرتك تضحكنا من قلبنا!", "مغامرة ولا أحلام؟", "زيد قليد"],
+        question: "من هي الشخصية التاريخية المشهورة في ليبيا؟",
+        options: ["معمر القذافي", "جمال بودرة", "نجيب محفوظ", "صلاح الدين"],
         answer: 0
       },
       {
-        question: "وقت تشوف واحد لابس لبسة غير عادية، شنو تقول؟",
-        options: ["يا تريس، لبستك تسرق البصر!", "شنو هاللبس؟", "أكيد مو تقليدي"],
-        answer: 0
-      },
-      {
-        question: "وقت تكون قاعد على دكة الحومة وتسمع الأخبار، شنو يكون التعليق؟",
-        options: ["يا تريس، الأخبار اليوم عامرة ضحك!", "كل يوم جديد", "ما تخلص الحكايات"],
-        answer: 0
-      },
-      {
-        question: "وقت يسألوك عن حالك وانت في مزاج غريب، شنو ترد؟",
-        options: ["ضاحك وبعيوني تريس!", "بخير الحمد لله", "مش مزبوط الحال"],
-        answer: 0
-      },
-      {
-        question: "وقت تسأل واحد: 'شنو سر ضحكتك اليوم؟'، شنو يرد؟",
-        options: ["سرها إنك دمت ضاحك يا تريس!", "سرها بيني وبينك", "ما تحكيش سر"],
+        question: "ما هو الرقم الذي يميز نجاح الليبي الحقيقي بحسب هذه اللعبة؟",
+        options: ["95%", "90%", "85%", "100%"],
         answer: 0
       }
     ];
 
     let currentQuestion = 0;
+    let score = 0;
 
-    function showAlert(icon, text, color) {
-      const alert = document.getElementById('customAlert');
-      alert.style.display = 'block';
-      alert.style.borderColor = color;
-      document.getElementById('alertIcon').textContent = icon;
-      document.getElementById('alertIcon').style.color = color;
-      document.getElementById('alertText').textContent = text;
-      
-      setTimeout(() => {
-        alert.style.display = 'none';
-      }, 2000);
+    // عناصر DOM
+    const startScreen = document.getElementById("start-screen");
+    const gameScreen = document.getElementById("game-screen");
+    const resultScreen = document.getElementById("result-screen");
+    const questionText = document.getElementById("question-text");
+    const questionNumber = document.getElementById("question-number");
+    const optionsList = document.getElementById("options-list");
+    const resultText = document.getElementById("result-text");
+    const restartBtn = document.getElementById("restart-btn");
+
+    const playBtn = document.getElementById("play-btn");
+    const infoBtn = document.getElementById("info-btn");
+    const settingsBtn = document.getElementById("settings-btn");
+    const settingsModal = document.getElementById("settings-modal");
+    const closeModalBtn = document.getElementById("close-modal");
+    const themeButtons = document.querySelectorAll(".theme-btn[data-theme]");
+
+    // بدء اللعبة وإعادة تشغيلها
+    function startGame() {
+      score = 0;
+      currentQuestion = 0;
+      startScreen.style.display = "none";
+      resultScreen.style.display = "none";
+      gameScreen.style.display = "block";
+      displayQuestion();
     }
 
-    function checkAnswer(selected) {
-      const correct = questions[currentQuestion].answer === selected;
-      
-      if(correct) {
-        showAlert('🎉', libyanCompliments[Math.floor(Math.random() * libyanCompliments.length)], getComputedStyle(document.documentElement).getPropertyValue('--correct'));
-        currentQuestion++;
-        updateProgress();
-        if(currentQuestion < questions.length) {
-          setTimeout(showQuestion, 1500);
-        } else {
-          showAlert('🏆', 'والله تريس خلصت اللعبة!', getComputedStyle(document.documentElement).getPropertyValue('--primary'));
-        }
-      } else {
-        showAlert('💥', libyanInsults[Math.floor(Math.random() * libyanInsults.length)], getComputedStyle(document.documentElement).getPropertyValue('--wrong'));
-        document.getElementById('options').children[selected].style.animation = 'shake 0.5s';
-      }
-    }
-
-    function updateProgress() {
-      const progress = (currentQuestion / questions.length) * 100;
-      document.querySelector('.progress').style.width = `${progress}%`;
-    }
-
-    function showQuestion() {
+    // عرض السؤال الحالي وخياراته
+    function displayQuestion() {
       const q = questions[currentQuestion];
-      document.getElementById('question').textContent = q.question;
-      
-      const optionsDiv = document.getElementById('options');
-      optionsDiv.innerHTML = q.options.map((opt, i) => `
-        <div class="option" onclick="checkAnswer(${i})">
-          <span class="material-icons-round">${i === q.answer ? 'check_circle' : 'cancel'}</span>
-          ${opt}
-        </div>
-      `).join('');
+      questionNumber.textContent = `السؤال ${currentQuestion + 1} من ${questions.length}`;
+      questionText.textContent = q.question;
+      optionsList.innerHTML = "";
+      q.options.forEach((option, index) => {
+        const li = document.createElement("li");
+        const btn = document.createElement("button");
+        btn.textContent = option;
+        btn.className = "option-button";
+        btn.addEventListener("click", () => checkAnswer(index));
+        li.appendChild(btn);
+        optionsList.appendChild(li);
+      });
     }
 
-    // بدء اللعبة
-    showQuestion();
-
-    // دالة الانتقال للسؤال التالي عند الضغط على زر "يلا نجم"
-    function nextQuestion() {
-      if (currentQuestion < questions.length) {
-        showQuestion();
+    // التحقق من الإجابة
+    function checkAnswer(selected) {
+      const q = questions[currentQuestion];
+      if (selected === q.answer) {
+        score++;
+      }
+      currentQuestion++;
+      if(currentQuestion < questions.length) {
+        displayQuestion();
+      } else {
+        showResult();
       }
     }
+
+    // عرض النتيجة مع النسبة والرسالة المناسبة
+    function showResult() {
+      gameScreen.style.display = "none";
+      resultScreen.style.display = "block";
+      const percent = Math.round((score / questions.length) * 100);
+      let message = "";
+      if (percent >= 95) {
+        message = "منور يا قهوي/ه";
+      } else {
+        message = "شكلك تونسي 😂";
+      }
+      resultText.textContent = `أجبت بشكل صحيح على ${score} من ${questions.length} أسئلة (${percent}%). ${message}`;
+    }
+
+    // أحداث أزرار التحكم
+    restartBtn.addEventListener("click", startGame);
+    playBtn.addEventListener("click", startGame);
+    infoBtn.addEventListener("click", () => {
+      alert("لعبة أسئلة مرحة عن ليبيا من تطوير سند كشانة.\nتابعنا على فيسبوك!");
+    });
+    settingsBtn.addEventListener("click", () => {
+      settingsModal.classList.add("active");
+    });
+    closeModalBtn.addEventListener("click", () => {
+      settingsModal.classList.remove("active");
+    });
+
+    // تغيير الثيم عند اختيار زر من إعدادات الثيمات
+    themeButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const themeClass = btn.getAttribute("data-theme");
+        document.body.className = ""; // إزالة كل الطبقات
+        document.body.classList.add(themeClass);
+        settingsModal.classList.remove("active");
+      });
+    });
   </script>
 </body>
 </html>
