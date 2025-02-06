@@ -3,522 +3,455 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>لعبة أسئلة ليبيه - تطوير سند كشنبه</title>
-  <!-- استيراد خطوط جوجل الحديثة -->
+  <title>لعبة أسئلة ليبية | من تطوير سند كنسية</title>
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- استخدام خط مميز يلائم الشخصية المرسومة -->
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Raleway:wght@600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* متغيرات الثيم الأساسية */
-    :root {
-      --bg-gradient: linear-gradient(135deg, #2980b9, #6dd5fa);
-      --primary-color: #2980b9;
-      --container-bg: #ffffff;
-      --text-color: #333;
-      --card-bg: #f9f9f9;
-      --card-border-color: #2980b9;
-      --shadow-light: rgba(0,0,0,0.15);
-      --shadow-heavy: rgba(0,0,0,0.35);
-    }
-    
-    /* ثيمات مخصصة */
-    .theme-dark {
-      --bg-gradient: linear-gradient(135deg, #2c3e50, #000000);
-      --primary-color: #f39c12;
-      --container-bg: #444;
-      --text-color: #fff;
-      --card-bg: #555;
-      --card-border-color: #f39c12;
-    }
-    
-    .theme-rose {
-      --bg-gradient: linear-gradient(135deg, #ff9a9e, #fecfef);
-      --primary-color: #d81b60;
-      --container-bg: #fff;
-      --text-color: #333;
-      --card-bg: #fff0f5;
-      --card-border-color: #d81b60;
-    }
-    
-    .theme-17feb {
-      --bg-gradient: linear-gradient(135deg, #006400, #ff0000);
-      --primary-color: #005000;
-      --container-bg: #fff;
-      --text-color: #333;
-      --card-bg: #f0fff0;
-      --card-border-color: #ff0000;
-    }
-    
-    .theme-jiny {
-      --bg-gradient: linear-gradient(135deg, #141E30, #243B55);
-      --primary-color: #ff4081;
-      --container-bg: #fff;
-      --text-color: #333;
-      --card-bg: #fce4ec;
-      --card-border-color: #ff4081;
-    }
-    
-    /* نمط عام */
+    /* Reset & Base */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-    }
-    
-    body {
       font-family: 'Cairo', sans-serif;
-      background: var(--bg-gradient);
-      color: var(--text-color);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow-x: hidden;
-      transition: background 0.5s, color 0.5s;
     }
-    
-    .container {
-      width: 95%;
-      max-width: 500px;
-      background: var(--container-bg);
-      border-radius: 30px;
-      box-shadow: 0 12px 25px var(--shadow-light);
-      padding: 25px 20px 80px; /* مساحة إضافية بالسفل لأخذ شريط الازرار العرضي */
-      position: relative;
-      animation: fadeIn 0.8s ease-in-out;
-    }
-    
-    header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    
-    header h1 {
-      font-family: 'Raleway', sans-serif;
-      font-size: 2em;
-      margin-bottom: 10px;
-      color: var(--primary-color);
-    }
-    
-    header p {
-      font-size: 1.1em;
+    html, body {
+      height: 100%;
+      background-color: var(--bg-color);
       color: var(--text-color);
     }
-    
-    #game-container {
-      min-height: 320px;
+    :root {
+      /* Default Theme: Drak Mode */
+      --bg-color: #121212;
+      --text-color: #f1f1f1;
+      --accent-color: #bb86fc;
+      --btn-bg: #1f1f1f;
+      --btn-hover: #333;
+      --modal-bg: rgba(0, 0, 0, 0.8);
+      --card-bg: #1e1e1e;
+    }
+    /* Theme 2: وروزي (بلاك بينك إلهام) */
+    .theme-rose {
+      --bg-color: #ffe6f0;
+      --text-color: #2d0e28;
+      --accent-color: #ff4d80;
+      --btn-bg: #ffd1dc;
+      --btn-hover: #ffb3c6;
+      --modal-bg: rgba(255, 230, 240, 0.8);
+      --card-bg: #fff0f5;
+    }
+    /* Theme 3: 17 فبراير ليبيا */
+    .theme-17feb {
+      --bg-color: #e6f7ff;
+      --text-color: #004466;
+      --accent-color: #0099cc;
+      --btn-bg: #cceeff;
+      --btn-hover: #99ddff;
+      --modal-bg: rgba(230, 247, 255, 0.8);
+      --card-bg: #e0f0ff;
+    }
+    /* Theme 4: جيني (بلاك بينك إلهام) */
+    .theme-genie {
+      --bg-color: #f7e7ff;
+      --text-color: #3e0a45;
+      --accent-color: #a832a6;
+      --btn-bg: #f0ccf5;
+      --btn-hover: #e699ee;
+      --modal-bg: rgba(247, 231, 255, 0.8);
+      --card-bg: #fae6ff;
+    }
+    body {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      padding: 20px;
+      padding-bottom: 80px; /* space for bottom nav */
+      transition: background-color 0.4s, color 0.4s;
     }
-    
-    .question-card {
-      width: 100%;
-      background: var(--card-bg);
-      border-left: 6px solid var(--card-border-color);
-      border-radius: 25px;
-      padding: 20px 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 6px 12px var(--shadow-light);
-      transition: transform 0.3s ease;
-    }
-    
-    .question-card:hover {
-      transform: scale(1.02);
-    }
-    
-    .question-card h2 {
-      font-size: 1.3em;
-      margin-bottom: 15px;
+    h1 {
+      margin-bottom: 10px;
       text-align: center;
-      font-family: 'Raleway', sans-serif;
     }
-    
+    p.description {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .game-container, .result-container {
+      width: 100%;
+      max-width: 500px;
+      background-color: var(--card-bg);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+      animation: fadeIn 0.8s ease-in-out;
+    }
+    .question {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+    }
     .options {
-      list-style: none;
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
-    
-    .options li {
-      background: var(--container-bg);
-      border: 2px solid var(--primary-color);
+    .option-btn {
+      padding: 10px;
+      border: none;
       border-radius: 50px;
-      padding: 12px 15px;
+      background-color: var(--btn-bg);
+      color: var(--text-color);
       cursor: pointer;
-      font-weight: 600;
-      text-align: center;
-      transition: all 0.3s ease;
+      transition: background-color 0.3s, transform 0.2s;
+      font-size: 1rem;
     }
-    
-    .options li:hover {
-      background: var(--primary-color);
-      color: #fff;
-      transform: translateX(5px);
-      box-shadow: 0 4px 8px var(--shadow-heavy);
+    .option-btn:hover {
+      background-color: var(--btn-hover);
+      transform: scale(1.02);
     }
-    
-    .result {
-      text-align: center;
-      font-size: 1.3em;
-      padding: 25px;
-      background: var(--card-bg);
-      border-radius: 25px;
-      border: 2px solid #27ae60;
-      box-shadow: 0 5px 10px var(--shadow-light);
-      animation: fadeIn 1s ease-in;
-      margin-bottom: 20px;
-      font-family: 'Raleway', sans-serif;
-    }
-    
-    /* شريط سفلي عرضي بتصميم عصري وارتفاع أقل */
-    .floating-footer {
+    .nav-bar {
       position: fixed;
-      bottom: 10px;
+      bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(255, 255, 255, 0.98);
-      border: 2px solid var(--primary-color);
-      border-radius: 50px;
-      padding: 5px 10px; /* تقليل الارتفاع عن طريق تقليل الحشوة */
+      background-color: var(--card-bg);
       display: flex;
+      justify-content: space-around;
       align-items: center;
-      justify-content: center;
-      gap: 20px;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-      z-index: 1000;
+      width: 90%;
+      max-width: 500px;
+      padding: 10px 0;
+      border-radius: 50px;
+      box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
     }
-    
-    .floating-footer button {
-      background: var(--primary-color);
+    .nav-btn {
+      flex: 1;
       border: none;
-      color: #fff;
-      padding: 12px 20px;
-      border-radius: 50px;
+      background: none;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 1em;
-      transition: background 0.4s ease, transform 0.3s ease;
-      font-family: 'Raleway', sans-serif;
+      font-size: 1.2rem;
+      color: var(--text-color);
+      transition: transform 0.2s;
     }
-    
-    .floating-footer button:hover {
-      background: #1f6391;
-      transform: scale(1.05);
+    .nav-btn:hover {
+      transform: scale(1.1);
     }
-    
-    .floating-footer .facebook-link {
-      color: var(--primary-color);
-      font-size: 1.8em;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-    }
-    
-    /* أيقونات جديدة مستوحاة من التصميم العصري */
-    .icon-play,
-    .icon-facebook,
-    .icon-settings {
-      width: 24px;
-      height: 24px;
-      fill: #fff;
-    }
-    
-    .icon-settings {
-      fill: #fff;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1);}
-    }
-    
-    @media (max-width: 600px) {
-      .container {
-        width: 95%;
-        padding: 20px 15px 90px;
-      }
-      header h1 { font-size: 1.8em; }
-      .floating-footer { flex-wrap: wrap; gap: 15px; padding: 5px 10px; }
-    }
-    
-    /* إعدادات الثيم Modal بتصميم جديد */
-    .modal-overlay {
+    /* Modal for Settings */
+    .modal {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.6);
-      display: none;
+      z-index: 10;
+      width: 100%;
+      height: 100%;
+      background-color: var(--modal-bg);
+      display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 2000;
     }
-    
     .modal-content {
-      background: var(--container-bg);
-      padding: 30px 20px;
-      border-radius: 30px;
+      background-color: var(--card-bg);
+      padding: 20px;
+      border-radius: 15px;
       width: 90%;
       max-width: 400px;
-      box-shadow: 0 10px 20px var(--shadow-heavy);
       text-align: center;
     }
-    
-    .modal-content h2 {
-      margin-bottom: 20px;
-      color: var(--primary-color);
-      font-family: 'Raleway', sans-serif;
-    }
-    
-    .theme-options {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    
-    .theme-options button {
-      padding: 12px;
+    .theme-btn {
+      padding: 10px;
+      margin: 8px;
+      border: none;
       border-radius: 50px;
-      border: 2px solid var(--primary-color);
-      background: var(--container-bg);
+      background-color: var(--btn-bg);
       color: var(--text-color);
       cursor: pointer;
-      transition: background 0.3s, transform 0.3s;
-      font-family: 'Raleway', sans-serif;
+      transition: background-color 0.3s, transform 0.2s;
+      width: 80%;
+      font-size: 1rem;
     }
-    
-    .theme-options button:hover {
-      background: var(--primary-color);
-      color: #fff;
+    .theme-btn:hover {
+      background-color: var(--btn-hover);
       transform: scale(1.03);
     }
-    
     .close-modal {
-      margin-top: 25px;
-      background: var(--primary-color);
+      margin-top: 10px;
+      padding: 8px 16px;
       border: none;
-      color: #fff;
-      padding: 10px 18px;
       border-radius: 50px;
+      background-color: var(--accent-color);
+      color: #fff;
       cursor: pointer;
-      font-family: 'Raleway', sans-serif;
-      transition: background 0.3s;
+      transition: background-color 0.3s;
     }
-    
     .close-modal:hover {
-      background: #1f6391;
+      background-color: var(--btn-hover);
+    }
+    /* Fade In Animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    /* Facebook Icon Styling */
+    .social {
+      text-align: center;
+      margin-top: 15px;
+    }
+    .social a {
+      text-decoration: none;
+      color: var(--accent-color);
+      font-size: 1.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      .option-btn {
+        font-size: 0.9rem;
+      }
+      .nav-btn {
+        font-size: 1rem;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>لعبة أسئلة ليبيه</h1>
-      <p>اختبر معلوماتك واستمتع بأسئلة عامة وترفيهية عن ليبيا، أسلوب جديد وإطلالة مستوحاة من هدي الشخصيات.</p>
-    </header>
-
-    <main id="game-container">
-      <!-- شاشة البداية -->
-      <div id="start-screen" class="question-card">
-        <h2>اضغط زر اللعب لبدء المغامرة</h2>
-      </div>
-      <!-- سيتم إضافة محتوى الأسئلة ديناميكيًا هنا -->
-    </main>
-
-    <!-- شريط سفلي عرضي بتصميم عصري وارتفاع أقل -->
-    <div class="floating-footer">
-      <button id="play-btn">
-        <svg class="icon-play" viewBox="0 0 24 24">
-          <path d="M8 5v14l11-7z"></path>
+  <!-- Initial Screen -->
+  <div id="start-screen" class="game-container">
+    <h1>لعبة سؤال ليبية</h1>
+    <p class="description">
+      لعبة ترفيهية وأسئلة عامّة ومضحكة عن ليبيا<br>
+      من تطوير: سند كنسية
+    </p>
+    <button id="start-btn" class="option-btn">ابدأ اللعب</button>
+    <div class="social">
+      <a href="https://www.facebook.com/sndkshnbh" target="_blank">
+        <!-- Facebook icon as inline SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" style="vertical-align: middle;" viewBox="0 0 24 24">
+          <path d="M22.675 0h-21.35c-.73 0-1.325.595-1.325 1.325v21.351c0 .73.595 1.324 1.325 1.324h11.494v-9.294h-3.128v-3.622h3.128v-2.672c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.31h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.324-.594 1.324-1.324v-21.35c0-.73-.594-1.325-1.324-1.325z"/>
         </svg>
-        لعب
-      </button>
-      <button id="retry-btn" style="display:none;">إعادة</button>
-      <button id="settings-btn">
-        <svg class="icon-settings" viewBox="0 0 24 24">
-          <path d="M19.14,12.94a1.43,1.43,0,0,0,0-1.88l2.1-1.64a.36.36,0,0,0,.08-.45l-2-3.46a.36.36,0,0,0-.43-.15l-2.48,1a5.12,5.12,0,0,0-1.62-.94L14.5,2.9A.35.35,0,0,0,14.16,2.5H9.84a.35.35,0,0,0-.34.4l-.38,2.54a5.12,5.12,0,0,0-1.62.94l-2.48-1a.36.36,0,0,0-.43.15l-2,3.46a.36.36,0,0,0,.08.45l2.1,1.64a1.43,1.43,0,0,0,0,1.88L2.53,14.58a.36.36,0,0,0-.08.45l2,3.46a.36.36,0,0,0,.43.15l2.48-1a5.12,5.12,0,0,0,1.62.94l.38,2.54a.35.35,0,0,0,.34.4h4.32a.35.35,0,0,0,.34-.4l.38-2.54a5.12,5.12,0,0,0,1.62-.94l2.48,1a.36.36,0,0,0,.43-.15l2-3.46a.36.36,0,0,0-.08-.45ZM12,15.6A3.6,3.6,0,1,1,15.6,12,3.6,3.6,0,0,1,12,15.6Z"/>
-        </svg>
-        إعدادات
-      </button>
-      <a class="facebook-link" href="https://www.facebook.com/sndkshnbh" target="_blank">
-        <svg class="icon-facebook" viewBox="0 0 24 24">
-          <path d="M22,12A10,10,0,1,0,10.9,21.95V14.89H8.41V12h2.5V9.79c0-2.47,1.47-3.84,3.72-3.84a15.44,15.44,0,0,1,2.21.19V8.7H16.23c-1.26,0-1.66.79-1.66,1.6V12h2.83l-.45,2.89H14.57v7.06A10,10,0,0,0,22,12Z"/>
-        </svg>
+         سند كنسية
       </a>
     </div>
   </div>
-  
-  <!-- إعدادات الثيم Modal بتصميم جديد -->
-  <div class="modal-overlay" id="settings-modal">
-    <div class="modal-content">
-      <h2>اختر الثيم</h2>
-      <div class="theme-options">
-        <button data-theme="default">الدراك مود</button>
-        <button data-theme="theme-rose">ثيم روزي (بلاك بينك)</button>
-        <button data-theme="theme-17feb">ثيم 17 فبراير ليبيا</button>
-        <button data-theme="theme-jiny">ثيم جيني (بلاك بينك)</button>
-      </div>
-      <button class="close-modal" id="close-modal">إغلاق</button>
+
+  <!-- Game Screen -->
+  <div id="game-screen" class="game-container" style="display:none;">
+    <div id="question-container">
+      <!-- Question and options will be injected here -->
     </div>
   </div>
-  
+
+  <!-- Result Screen -->
+  <div id="result-screen" class="result-container" style="display:none; text-align: center;">
+    <h1>نتيجة اللعبة</h1>
+    <p id="result-message" style="font-size: 1.2rem; margin: 15px 0;"></p>
+    <button id="restart-btn" class="option-btn">إعادة اللعبة</button>
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <div class="nav-bar">
+    <button id="nav-play" class="nav-btn" title="لعب">
+      <!-- Playstation hand icon (using emoji as placeholder) -->
+      ✋ لعب
+    </button>
+    <button id="nav-try" class="nav-btn" title="حاول">
+      🔄 حاول
+    </button>
+    <button id="nav-settings" class="nav-btn" title="الإعدادات">
+      ⚙️ إعدادات
+    </button>
+  </div>
+
+  <!-- Modal for Theme Settings -->
+  <div id="modal-settings" class="modal" style="display:none;">
+    <div class="modal-content">
+      <h2>اختر الثيم</h2>
+      <button class="theme-btn" data-theme="default">دراك مود</button>
+      <button class="theme-btn" data-theme="theme-rose">روزي من فرقة بلاك بينك</button>
+      <button class="theme-btn" data-theme="theme-17feb">17 فبراير ليبيا</button>
+      <button class="theme-btn" data-theme="theme-genie">جيني من فرقة بلاك بينك</button>
+      <br>
+      <button id="close-modal" class="close-modal">إغلاق</button>
+    </div>
+  </div>
+
   <script>
-    // قائمة الأسئلة مع الخيارات والإجابات الصحيحة
+    // بيانات اللعبة: 10 أسئلة مع خيارات وإجابة صحيحة (index)
     const questions = [
       {
         question: "ما هي عاصمة ليبيا؟",
-        options: ["طرابلس", "بنغازي", "مصراتة", "سبها"],
-        answer: 0
+        options: ["بنغازي", "مصراتة", "طرابلس", "سبها"],
+        correct: 2
       },
       {
-        question: "ما هو علم ليبيا الحالي؟",
-        options: ["علم أحمر وأسود وأخضر", "علم أخضر فقط", "علم أحمر فقط", "علم أزرق"],
-        answer: 0
+        question: "أي من هذه المدن تعتبر مدينة تاريخية عريقة في ليبيا؟",
+        options: ["طرابلس", "بيشة", "القصر العربي", "زليتن"],
+        correct: 0
       },
       {
-        question: "ما هو أشهر طبق ليبي تقليدي؟",
-        options: ["البازين", "الكسكس", "المشوي", "الشاورما"],
-        answer: 0
+        question: "ما هو الطبق الشهير في المطبخ الليبي؟",
+        options: ["كسكسي", "مقروط", "البسيسة", "الحريرة"],
+        correct: 2
       },
       {
-        question: "أي الرياضات تعتبر الأكثر شعبية في ليبيا؟",
-        options: ["كرة القدم", "كرة السلة", "كرة الطاولة", "التنس"],
-        answer: 0
+        question: "أي منطقة ليبية تشتهر بالزيتون؟",
+        options: ["زليتن", "سبها", "بنغازي", "الغريان"],
+        correct: 0
       },
       {
-        question: "ما هي أكبر مدينة في ليبيا من حيث عدد السكان؟",
-        options: ["طرابلس", "بنغازي", "مصراتة", "سبها"],
-        answer: 0
+        question: "ما الحيوان الذي يعتبر رمزاً قوياً في التراث الليبي؟",
+        options: ["الطاووس", "الجمل", "الأسد", "الثور"],
+        correct: 1
       },
       {
-        question: "ما الحيوان الذي يرمز إلى الصحراء الليبية؟",
-        options: ["البقرة", "الجمل", "الأسد", "النمر"],
-        answer: 1
+        question: "أي من هذه المهرجانات تقام في ليبيا؟",
+        options: ["مهرجان الجاز", "مهرجان الرمال", "مهرجان الزيت", "مهرجان النخيل"],
+        correct: 3
       },
       {
-        question: "إذا حصلت على 95% فما الرسالة؟",
-        options: ["شكلك تونسي 😂", "منور يا قهوي/ه", "تحتاج إعادة", "ذكي جداً"],
-        answer: 1
+        question: "ما هو اسم البحيرة المالحة المعروفة في ليبيا؟",
+        options: ["بحيرة فزان", "بحيرة القزوين", "بحيرة طبس", "بحيرة نسمة"],
+        correct: 0
       },
       {
-        question: "كم عدد مراحل اللعبة؟",
-        options: ["5", "10", "15", "20"],
-        answer: 1
+        question: "ما هي الرياضة الشعبية في ليبيا؟",
+        options: ["كرة السلة", "كرة القدم", "كرة الماء", "الكريكيت"],
+        correct: 1
       },
       {
-        question: "ما هو شعار اللعبة؟",
-        options: ["القوة والذكاء", "المغامرة والمعرفة", "المرح والفكاهة", "الصراحة والنجاح"],
-        answer: 2
+        question: "من هو شخصية مشهورة في تاريخ ليبيا؟",
+        options: ["معمر القذافي", "نجيب محفوظ", "صلاح الدين", "أحمد خالد توفيق"],
+        correct: 0
       },
       {
-        question: "ما تقييمك لمطوري اللعبة؟",
-        options: ["ممتاز", "جيد", "متوسط", "سيء"],
-        answer: 0
+        question: "إذا حصلت على نتيجة 100%، ماذا سيظهر؟",
+        options: ["شكلك تونسي 😂", "منور يا قهوي/ه", "ممتاز", "أنت الأفضل"],
+        correct: 1
       }
     ];
-    
-    let currentQuestion = -1;
+
+    let currentQuestionIndex = 0;
     let score = 0;
-    const totalQuestions = questions.length;
-    const gameContainer = document.getElementById('game-container');
-    const playBtn = document.getElementById('play-btn');
-    const retryBtn = document.getElementById('retry-btn');
-    const startScreen = document.getElementById('start-screen');
-    
-    // بدء اللعبة وإظهار السؤال الأول
+
+    // عناصر الواجهة
+    const startScreen = document.getElementById("start-screen");
+    const gameScreen = document.getElementById("game-screen");
+    const resultScreen = document.getElementById("result-screen");
+    const questionContainer = document.getElementById("question-container");
+    const resultMessage = document.getElementById("result-message");
+
+    const startBtn = document.getElementById("start-btn");
+    const restartBtn = document.getElementById("restart-btn");
+
+    // Navigation bar buttons
+    const navPlay = document.getElementById("nav-play");
+    const navTry = document.getElementById("nav-try");
+    const navSettings = document.getElementById("nav-settings");
+
+    // Modal & Theme settings
+    const modalSettings = document.getElementById("modal-settings");
+    const closeModalBtn = document.getElementById("close-modal");
+    const themeBtns = document.querySelectorAll(".theme-btn");
+
+    // بدء اللعبة
     function startGame() {
-      currentQuestion = -1;
+      currentQuestionIndex = 0;
       score = 0;
       startScreen.style.display = "none";
-      retryBtn.style.display = "none";
-      playBtn.style.display = "none";
-      loadNextQuestion();
+      resultScreen.style.display = "none";
+      gameScreen.style.display = "block";
+      showQuestion();
     }
-    
-    // تحميل السؤال التالي
-    function loadNextQuestion() {
-      currentQuestion++;
-      gameContainer.innerHTML = "";
-      if (currentQuestion < totalQuestions) {
-        const card = document.createElement('div');
-        card.className = "question-card";
-        const questionTitle = document.createElement('h2');
-        questionTitle.textContent = questions[currentQuestion].question;
-        card.appendChild(questionTitle);
-        const optionsList = document.createElement('ul');
-        optionsList.className = "options";
-        questions[currentQuestion].options.forEach((option, index) => {
-          const li = document.createElement('li');
-          li.textContent = option;
-          li.addEventListener('click', () => selectOption(index));
-          optionsList.appendChild(li);
-        });
-        card.appendChild(optionsList);
-        gameContainer.appendChild(card);
+
+    function showQuestion() {
+      // التأكد من وجود السؤال
+      if (currentQuestionIndex >= questions.length) {
+        return showResult();
+      }
+      const currentQuestion = questions[currentQuestionIndex];
+      questionContainer.innerHTML = `
+        <div class="question">${currentQuestion.question}</div>
+        <div class="options">
+          ${currentQuestion.options.map((option, index) => `
+            <button class="option-btn" data-index="${index}">${option}</button>
+          `).join('')}
+        </div>
+      `;
+      // إضافة مستمع للأزرار
+      const optionButtons = document.querySelectorAll(".option-btn");
+      optionButtons.forEach(btn => {
+        btn.addEventListener("click", selectOption);
+      });
+    }
+
+    function selectOption(event) {
+      const selectedIndex = parseInt(event.target.getAttribute("data-index"));
+      const currentQuestion = questions[currentQuestionIndex];
+      if (selectedIndex === currentQuestion.correct) {
+        score++;
+      }
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length) {
+        showQuestion();
       } else {
         showResult();
       }
     }
-    
-    // اختيار إجابة والتحقق منها
-    function selectOption(selectedIndex) {
-      if (selectedIndex === questions[currentQuestion].answer) {
-        score++;
-      }
-      setTimeout(loadNextQuestion, 300);
-    }
-    
-    // عرض النتيجة
+
     function showResult() {
-      gameContainer.innerHTML = "";
-      const percent = Math.round((score / totalQuestions) * 100);
-      const msg = (percent >= 95) ? "منور يا قهوي/ه" : "شكلك تونسي 😂";
-      const resultCard = document.createElement('div');
-      resultCard.className = "result";
-      resultCard.innerHTML = `<h2>أنجزت ${percent}% من الأسئلة</h2>
-                              <p>${msg}</p>`;
-      gameContainer.appendChild(resultCard);
-      retryBtn.style.display = "flex";
-      playBtn.style.display = "flex";
+      gameScreen.style.display = "none";
+      resultScreen.style.display = "block";
+      const percentage = Math.round((score / questions.length) * 100);
+      // إذا كانت النتيجة 100% (أي 10/10) تعتبر فوق 95%
+      let message = "";
+      if (percentage >= 95) {
+        message = `منور يا قهوي/ه - ${percentage}%`;
+      } else {
+        message = `شكلك تونسي 😂 - ${percentage}%`;
+      }
+      resultMessage.innerText = message;
     }
-    
-    playBtn.addEventListener('click', startGame);
-    retryBtn.addEventListener('click', startGame);
-    
-    // دعم اللمس لجميع الشاشات
-    document.addEventListener("touchstart", function(){}, true);
-    
-    // إعدادات الثيم Modal
-    const settingsBtn = document.getElementById('settings-btn');
-    const settingsModal = document.getElementById('settings-modal');
-    const closeModal = document.getElementById('close-modal');
-    const themeButtons = document.querySelectorAll('.theme-options button');
-    
-    settingsBtn.addEventListener('click', () => {
-      settingsModal.style.display = "flex";
+
+    // إعادة تشغيل اللعبة
+    function restartGame() {
+      startGame();
+    }
+
+    // Navigation Bar Events
+    navPlay.addEventListener("click", () => {
+      // الذهاب إلى شاشة البداية
+      startScreen.style.display = "block";
+      gameScreen.style.display = "none";
+      resultScreen.style.display = "none";
     });
-    
-    closeModal.addEventListener('click', () => {
-      settingsModal.style.display = "none";
+    navTry.addEventListener("click", () => {
+      // إعادة تشغيل اللعبة من أي شاشة
+      startGame();
     });
-    
-    themeButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.body.classList.remove("theme-dark", "theme-rose", "theme-17feb", "theme-jiny");
+    navSettings.addEventListener("click", () => {
+      modalSettings.style.display = "flex";
+    });
+
+    // Modal Close
+    closeModalBtn.addEventListener("click", () => {
+      modalSettings.style.display = "none";
+    });
+    // تغيير الثيم عن طريق تعيين الكلاس المناسب على body
+    themeBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
         const theme = btn.getAttribute("data-theme");
-        if(theme !== "default"){
+        document.body.classList.remove("theme-rose", "theme-17feb", "theme-genie");
+        if(theme !== "default") {
           document.body.classList.add(theme);
         }
-        settingsModal.style.display = "none";
+        modalSettings.style.display = "none";
       });
     });
+
+    // أزرار البداية وإعادة اللعب
+    startBtn.addEventListener("click", startGame);
+    restartBtn.addEventListener("click", restartGame);
   </script>
 </body>
 </html>
